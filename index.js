@@ -11,15 +11,15 @@ io.on('connection', function(socket){
 
   socket.on('login', function(nick){
     nickname = nick;
-    io.emit('notif', nickname + ' connects');
+    socket.broadcast.emit('notif', nickname + ' connects');
   })
 
   socket.on('chat message', function(msg){
-    io.emit('chat message', nickname + ": " + msg);
+    socket.broadcast.emit('chat message', msg);
   });
 
   socket.on('disconnect', function() {
-    io.emit('notif', nickname + ' disconnects');
+    socket.broadcast.emit('notif', nickname + ' disconnects');
   })
 });
 

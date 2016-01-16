@@ -22,6 +22,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+      function appendMessage (msg) {
+        $('#messages').append($('<li>').text(msg));
+      }
+
       var nick = prompt("Enter your nickname");
 
       var socket = io();
@@ -29,13 +33,15 @@
       socket.emit("login", nick);
 
       $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
+        var msg = nick + ": " + $('#m').val();
+        appendMessage(msg);
+        socket.emit('chat message', msg);
         $('#m').val('');
         return false;
       });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
-      });
+
+      socket.on('chat message', appendMessage);
+
       socket.on('notif', function(msg){
         $('#messages').append($('<li class="notif">').text(msg));
       })
