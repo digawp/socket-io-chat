@@ -7,12 +7,19 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  io.emit('notif', 'Someone connects');
+  var nickname = '';
+
+  socket.on('login', function(nick){
+    nickname = nick;
+    io.emit('notif', nickname + ' connects');
+  })
+
   socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+    io.emit('chat message', nickname + ": " + msg);
   });
+
   socket.on('disconnect', function() {
-    io.emit('notif', 'Someone disconnects');
+    io.emit('notif', nickname + ' disconnects');
   })
 });
 
