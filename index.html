@@ -26,11 +26,15 @@
         $('#messages').append($('<li>').text(msg));
       }
 
+      function login () {
+        socket.emit("login", nick);
+      }
+
       var nick = prompt("Enter your nickname");
 
       var socket = io();
 
-      socket.emit("login", nick);
+      login();
 
       $('form').submit(function(){
         var msg = nick + ": " + $('#m').val();
@@ -39,6 +43,8 @@
         $('#m').val('');
         return false;
       });
+
+      socket.on('reconnect', login);
 
       socket.on('chat message', appendMessage);
 
