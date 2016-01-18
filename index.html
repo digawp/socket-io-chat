@@ -44,7 +44,14 @@
         return false;
       });
 
-      socket.on('reconnect', login);
+      socket.on('reconnect', function() {
+        login();
+        $('#messages').append($('<li class="notif">').text("Reconnected."));
+      });
+
+      socket.on('disconnect', function() {
+        $('#messages').append($('<li class="notif">').text("Disconnected. Reconnecting..."));
+      });
 
       socket.on('chat message', appendMessage);
 
